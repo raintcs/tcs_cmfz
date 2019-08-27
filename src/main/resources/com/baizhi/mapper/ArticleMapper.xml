@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.ArticleDao">
+    <select id="findAll" resultType="article">
+        select id, title, status, author, content, upload_date as uploadDate, publish_date as publishDate
+        from cmfz_article
+        limit #{start},#{rows}
+    </select>
+
+    <select id="getCount" resultType="Integer">
+        select count(*)
+        from cmfz_article
+    </select>
+
+    <insert id="add" parameterType="article">
+        insert into cmfz_article(id, title, status, author, content, upload_date, publish_date)
+        values (#{id}, #{title}, #{status}, #{author}, #{content}, #{uploadDate}, #{publishDate})
+    </insert>
+
+    <update id="update" parameterType="article">
+        update cmfz_article
+        set id=#{id},
+            title= #{title},
+            author=#{author},
+            status=#{status},
+            content=#{content}
+        where id = #{id};
+    </update>
+
+</mapper>

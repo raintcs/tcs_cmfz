@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.UserDao">
+    <select id="getAll" resultType="User">
+        select id,
+               name,
+               password,
+               phone,
+               icon,
+               dharma,
+               sex,
+               status,
+               create_date as createDate,
+               province,
+               city
+        from cmfz_user
+    </select>
+
+    <select id="selectCount" resultType="Integer">
+        select count(*)
+        from cmfz_user
+    </select>
+
+    <!--分页展示-->
+    <select id="findByPage" resultType="User">
+        select id,
+               name,
+               password,
+               phone,
+               icon,
+               dharma,
+               sex,
+               status,
+               create_date as createDate,
+               province,
+               city
+        from cmfz_user
+        limit #{start},#{rows}
+    </select>
+
+    <select id="queryAddressAndCount" resultType="EchartsMap">
+        select province as name, count(id) as value
+        from cmfz_user
+        group by province
+    </select>
+    <select id="queryAddressCount" resultType="Integer">
+        select count(id)
+        from cmfz_user
+        group by province
+    </select>
+
+    <select id="selectByDayCount" resultType="int">
+        select count(*) value
+        from cmfz_user
+        where datediff(sysdate(), create_date) <![CDATA[<=]]> #{dayCount}
+    </select>
+
+</mapper>

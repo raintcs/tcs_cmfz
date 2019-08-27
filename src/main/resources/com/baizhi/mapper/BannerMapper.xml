@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.BannerDao">
+    <select id="selectCount" resultType="Integer">
+        select count(*)
+        from cmfz_banner;
+    </select>
+
+    <!--分页展示-->
+    <select id="findByPage" resultType="Banner">
+        select id, title, status, `describe`, create_date, image
+        from cmfz_banner
+        limit #{start},#{rows}
+    </select>
+    <!--添加轮播图-->
+    <insert id="add" parameterType="banner">
+        insert into cmfz_banner
+        values (#{id}, #{title}, #{status}, #{describe}, #{create_date}, #{image})
+    </insert>
+    <!--修改轮播图-->
+    <update id="update" parameterType="banner">
+        update cmfz_banner
+        set image=#{image}
+        where id = #{id}
+    </update>
+
+    <!--修改状态-->
+    <update id="updateStatus" parameterType="banner">
+        update cmfz_banner
+        set status=#{status}
+        where id = #{id}
+    </update>
+    <!--批量删除-->
+    <delete id="del" parameterType="String">
+        delete from cmfz_banner
+        where id in
+        <foreach collection="array" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.ChapterDao">
+
+    <resultMap id="result" type="chapter">
+        <id property="id" column="id"></id>
+        <result property="title" column="title"></result>
+        <result property="size" column="size"></result>
+        <result property="duration" column="duration"></result>
+        <result property="upload_date" column="upload_date"></result>
+        <result property="video" column="video"></result>
+        <result property="status" column="status"></result>
+        <association property="album_id" javaType="String">
+            <id property="id" column="aid"></id>
+            <result property="title" column="atitle"></result>
+        </association>
+    </resultMap>
+    <select id="findAll" resultMap="result" parameterType="String">
+        select c.id,
+               c.title,
+               c.size,
+               c.duration,
+               c.upload_date,
+               c.video,
+               c.status,
+               c.album_id,
+               a.id    as aid,
+               a.title as atitle
+        from cmfz_chapter c
+                 left join cmfz_album a
+                           on c.album_id = a.id
+        where a.id = #{id}
+    </select>
+
+
+    <select id="findByPage" resultMap="result">
+        select c.id,
+               c.title,
+               c.size,
+               c.duration,
+               c.upload_date,
+               c.video,
+               c.status,
+               c.album_id,
+               a.id    as aid,
+               a.title as atitle
+        from cmfz_chapter c
+                 left join cmfz_album a
+                           on c.album_id = a.id
+        where a.id = #{id}
+        limit #{start},#{rows}
+    </select>
+
+    <select id="selectCount" resultType="Integer" parameterType="String">
+        select count(*)
+        from cmfz_chapter
+        where album_id = #{id}
+    </select>
+
+    <insert id="add" parameterType="chapter">
+        insert into cmfz_chapter (id, title, size, duration, upload_date, video, status, album_id)
+        values (#{id}, #{title}, #{size}, #{duration}, #{upload_date}, #{video}, #{status}, #{album_id});
+    </insert>
+
+    <update id="update" parameterType="chapter">
+        update cmfz_chapter
+        set video   = #{video},
+            size=#{size},
+            duration=#{duration},
+            album_id=#{album_id}
+        where id = #{id};
+    </update>
+
+</mapper>
